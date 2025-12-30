@@ -1,13 +1,7 @@
 from pymongo import MongoClient
-from dotenv import  load_dotenv
-from pathlib import Path
-import os
+import config
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / '.env')
-MONGO_URI = os.getenv("MONGO_URI")
-
-load_dotenv()
+MONGO_URI = config.MONGO_URI
 client = MongoClient(MONGO_URI)
 
 def GetDb():
@@ -16,26 +10,36 @@ def GetDb():
 def AddExercise(exercise):
     GetDb()["exercises"].update_one({"name": exercise["name"],}, {"$set": exercise}, upsert=True)
 
-def DoesUserExist(email : str):
+def DoesUserExist(email: str) -> bool:
     users = GetDb()["users"]
 
-    if users.find_one({"email": email}):
-        return True
-    
-    return False
+    return users.find_one({"email": email}) is not None
 
-def CreateUser(email : str, hashed_password : str):
+def CreateUser(email: str, hashed_password: str) -> str:
     if DoesUserExist(email):
-        return
+        raise ValueError("User already exists") 
 
     users = GetDb()["users"]
-    users.insert_one({"email": email, "password": hashed_password})
-
-def GetUserHashedPasswordInDB(email : str) -> str:
-    if not DoesUserExist(email):
-        return ""
+    result = users.insert_one({
+        "email": email,
+        "password": hashed_password
+    })
     
-    users = GetDb()["users"]
-    user = users.find_one({"email": email})
+    return str(result.inserted_id)  
 
+def GetUserIdByEmail(email: str) -> str | None:
+    users = GetDb()["users"]
+    user = users.find_one({"email": email}, {"_id": 1})
+
+    if user:
+        return str(user["_id"])
+    
+    return None
+
+def GetUserHashedPasswordInDB(email: str) -> str:
+    user = GetDb()["users"].find_one({"email": email}, {"password": 1})
+
+    if not user:
+        raise ValueError("User not found")  
+    
     return user["password"]

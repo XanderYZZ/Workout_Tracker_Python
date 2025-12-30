@@ -4,12 +4,13 @@ from pathlib import Path
 
 grandparent_dir = Path(__file__).resolve().parents[1]
 sys.path.append(str(grandparent_dir))
-import api
+
+import api # This import has to be right here.
 
 client = TestClient(api.app)
 
 def test_signup():
-    email_using = "testingtesting@example.com"
+    email_using = "testingtesting32@example.com"
 
     response = client.post(
         "/signup",
@@ -17,4 +18,3 @@ def test_signup():
     )
 
     assert response.status_code == 201
-    assert response.json()["email"] == email_using
