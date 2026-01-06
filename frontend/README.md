@@ -1,0 +1,1 @@
+This folder is for the frontend of the Workout Tracker project.

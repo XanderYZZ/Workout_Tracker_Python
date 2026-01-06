@@ -5,7 +5,7 @@ from routers import (auth, workouts, reports,)
 app = FastAPI(title="Workout Tracker",)
 
 origins = [
-    "http://localhost:3000", # React default for if I create a frontend for this project in the future.
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 
