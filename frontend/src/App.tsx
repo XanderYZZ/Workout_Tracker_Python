@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Workouts from './pages/Workouts';
+import ProtectedRoute from './wrappers/protected_route';
 
 function Layout() {
   return (
@@ -39,7 +40,11 @@ function App() {
         },
         {
           path: "workouts",
-          element: <Workouts />
+          element: (
+            <ProtectedRoute>
+              <Workouts />
+            </ProtectedRoute>
+          ),
         }
       ],
     },

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const base_url = import.meta.env.VITE_BACKEND_BASE_URL;
 
 const isAuthenticatedDefault = () => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("token");
 
   return !!token;
 };
@@ -30,13 +30,13 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem("access_token"));
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const isAuthenticated = () => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("token");
     return !!token;
   };
 
@@ -60,10 +60,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       } else {
         setUser(null);
       }
-      localStorage.setItem("access_token", token);
+      localStorage.setItem("token", token);
     } else {
       setUser(null);
-      localStorage.removeItem("access_token");
+      localStorage.removeItem("token");
     }
   }, [token]);
 
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     try {
       const response = await axios.post(base_url + "/login", formData);
-      const newToken = response.data.access_token;
+      const newToken = response.data.token;
       const email = response.data.email;
       setToken(newToken);
       setUser({ email: email });
@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         email,
         password,
       });
-      const newToken = result.data.access_token;
+      const newToken = result.data.token;
       setToken(newToken);
       toast.success("Signup successful!");
       navigate('/workouts');
@@ -120,7 +120,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = async () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem("access_token");
+    localStorage.removeItem("token");
     toast("Logged out");
     navigate('/');
   };

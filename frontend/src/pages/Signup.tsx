@@ -79,7 +79,7 @@ const Signup: FC = () => {
         <div className="background-primary flex items-center justify-center">
             <div className="max-w-md w-full space-y-8">
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold text-gray-100 mb-2">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
                         Create your account
                     </h2>
                     <p className="text-gray-800">
