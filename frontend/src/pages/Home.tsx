@@ -42,18 +42,6 @@ const Home: FC = () => {
                                 <a className="px-6 py-3 rounded-full bg-indigo-500 text-white font-medium hover:bg-indigo-400 transition">
                                     Get started free
                                 </a>
-                                <a className="px-6 py-3 rounded-full border border-white/20 text-slate-200 hover:bg-white/10 transition">
-                                    View demo
-                                </a>
-                            </div>
-                        </div>
-
-                        {/* VISUAL */}
-                        <div className="relative">
-                            <div className="rounded-2xl bg-slate-900/80 border border-white/10 shadow-2xl p-6">
-                                <div className="h-56 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-lg font-semibold">
-                                    Dashboard Preview
-                                </div>
                             </div>
                         </div>
                     </div>
