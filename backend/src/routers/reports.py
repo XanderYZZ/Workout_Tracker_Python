@@ -20,4 +20,4 @@ async def GetReport(
         exercise=exercise,
         total_workouts_found=len(workouts),
         workouts=[models.WorkoutResponse(**w) for w in workouts]
-    )
+    )   

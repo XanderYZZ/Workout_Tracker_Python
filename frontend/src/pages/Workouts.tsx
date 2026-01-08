@@ -38,7 +38,7 @@ const Workouts: FC = () => {
 
   useEffect(() => {
     fetchWorkouts();
-  }, []);
+  }, []); // I only run this once upon the initial load.
 
   const createWorkout = async () => {
     try {
