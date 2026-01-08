@@ -18,6 +18,7 @@ class ExerciseInWorkout(BaseModel):
     notes: Optional[str] = None
 
 class WorkoutCreate(BaseModel):
+    name: str
     scheduled_date: Optional[AwareDatetime] = None
     comments: Optional[str] = None
     exercises: List[ExerciseInWorkout] = Field(..., min_length=1)

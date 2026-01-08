@@ -30,16 +30,16 @@ def test_full_workflow():
     assert token != ""
 
     headers = {"Authorization": f"Bearer {token}"}
-    exercises_to_choose = ("Push-up", "Squat", "Barbell Bench Press", "Barbell Overhead Press")
 
     for i in range(5):
         # === Use CURRENT TIME for scheduled_date ===
         workout_data = {
+            "name": "Push Day",
             "comments": f"Test workout created.",
             "exercises": [
-                {"name": "Squat", "sets": 3, "reps": 15},
-                {"name": random.choice(exercises_to_choose), "sets": 4, "reps": 10}
-            ]
+                {"name": "Bench Press", "sets": 3, "reps": 15},
+            ],
+            "scheduled_date": datetime.now(timezone.utc).isoformat(),
         }
 
         response = client.post("/workouts/", json=workout_data, headers=headers)
@@ -63,7 +63,7 @@ def test_full_workflow():
         assert response.status_code == 200
         assert response.json()["comments"] == "Updated right after creation!"
 
-    response = client.get(f"/reports/contains", params={"exercise": "Squat",}, headers=headers)
+    response = client.get(f"/reports/contains", params={"exercise": "Bench Press",}, headers=headers)
     assert response.status_code == 200
     print(response.json())
 

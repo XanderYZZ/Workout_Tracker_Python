@@ -16,3 +16,27 @@ interface AuthContextType {
   setIsLoading: (loading: boolean) => void;
   isAuthenticated: () => boolean;
 }
+
+interface Exercise {
+  name: string;
+  sets: number;
+  reps: number;
+  weight: number;
+}
+
+interface Workout {
+  id: string;
+  name: string;
+  scheduled_date: string;
+  exercises: Exercise[];
+  notes: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface WorkoutFormData {
+  name: string;
+  scheduled_date: string;
+  exercises: Exercise[];
+  comments: string;
+}

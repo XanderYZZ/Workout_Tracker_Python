@@ -34,7 +34,7 @@ async def CreateWorkout(
     return models.WorkoutResponse(**created_workout)
 
 # UPDATE
-@router.put("/{workout_id}", response_model=models.WorkoutResponse)
+@router.put("/{workout_id}", response_model=models.WorkoutResponse, status_code=status.HTTP_200_OK)
 async def UpdateWorkout(
     workout_id : str,
     workout_update : models.WorkoutUpdate,
