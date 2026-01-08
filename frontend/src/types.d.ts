@@ -29,7 +29,7 @@ interface Workout {
   name: string;
   scheduled_date: string;
   exercises: Exercise[];
-  notes: string;
+  comments: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -39,4 +39,8 @@ interface WorkoutFormData {
   scheduled_date: string;
   exercises: Exercise[];
   comments: string;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
 }

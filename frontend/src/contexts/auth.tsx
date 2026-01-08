@@ -24,10 +24,6 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: isAuthenticatedDefault,
 });
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));

@@ -32,3 +32,10 @@
     }
   }
 }
+
+.swal2-confirm,
+.swal2-cancel {
+  padding: 0.5rem 6.25rem;
+  font-size: 1.05rem;
+  border-radius: 10px;
+}

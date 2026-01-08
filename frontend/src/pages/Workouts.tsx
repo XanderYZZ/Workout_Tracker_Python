@@ -2,8 +2,7 @@ import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { apiClient } from "../lib/apiclient";
 import { Calendar, Plus, Edit2, Trash2, X, Check, ChevronDown, ChevronUp } from 'lucide-react';
-
-const base_url = import.meta.env.VITE_BACKEND_BASE_URL;
+import Swal from 'sweetalert2';
 
 const Workouts: FC = () => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -23,9 +22,9 @@ const Workouts: FC = () => {
   const fetchWorkouts = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get(`${base_url}/workouts/`);
+      const response = await apiClient.get(`/workouts/`);
       
-      if (response.status != 200) throw new Error('Failed to fetch workouts');
+      if (response.status !== 200) throw new Error('Failed to fetch workouts');
       
       const data = response.data;
       setWorkouts(data);
@@ -43,16 +42,14 @@ const Workouts: FC = () => {
 
   const createWorkout = async () => {
     try {
-      const response = await apiClient.post(`${base_url}/workouts/`, {
-        body: JSON.stringify({
-          name: formData.name,
-          scheduled_date: formData.scheduled_date,
-          exercises: formData.exercises,
-          comments: formData.comments
-        })
+      const response = await apiClient.post(`/workouts/`, {
+        name: formData.name,
+        scheduled_date: new Date(formData.scheduled_date).toISOString(),
+        exercises: formData.exercises,
+        comments: formData.comments
       });
 
-      if (response.status != 201) throw new Error('Failed to create workout');
+      if (response.status !== 201) throw new Error('Failed to create workout');
 
       await fetchWorkouts();
       resetForm();
@@ -64,11 +61,13 @@ const Workouts: FC = () => {
 
   const updateWorkout = async (workoutId: string) => {
     try {
-      const response = await apiClient.put(`${base_url}/workouts/${workoutId}`, {
-        body: JSON.stringify(formData)
-      });
+      const response = await apiClient.put(`/workouts/${workoutId}`, {
+        scheduled_date: new Date(formData.scheduled_date).toISOString(),
+        exercises: formData.exercises,
+        comments: formData.comments
+      });   
 
-      if (response.status != 200) throw new Error('Failed to update workout');
+      if (response.status !== 200) throw new Error('Failed to update workout');
 
       await fetchWorkouts();
       resetForm();
@@ -79,12 +78,27 @@ const Workouts: FC = () => {
   };
 
   const deleteWorkout = async (workoutId: string) => {
-    if (!confirm('Are you sure you want to delete this workout?')) return;
+    const result = await Swal.fire({
+        title: "Are you sure you want to delete this workout?",
+        text: "This cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        confirmButtonColor: "#499c59ff",
+        cancelButtonColor: "#cc3e41ff",
+        background: '#323234ff',
+        color: '#f8fafc',
+    });
+
+    if (!result.isConfirmed) {
+        return;
+    }
 
     try {
-      const response = await apiClient.delete(`${base_url}/workouts/${workoutId}`);
+      const response = await apiClient.delete(`/workouts/${workoutId}`);
 
-      if (response.status != 204) throw new Error('Failed to delete workout');
+      if (response.status !== 204) throw new Error('Failed to delete workout');
 
       await fetchWorkouts();
     } catch (err) {
@@ -102,9 +116,14 @@ const Workouts: FC = () => {
   };
 
   const startEdit = (workout: Workout) => {
+    const date = new Date(workout.scheduled_date);
+    const localDateTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 16);
+    
     setFormData({
       name: workout.name,
-      scheduled_date: new Date(workout.scheduled_date).toISOString().slice(0, 16),
+      scheduled_date: localDateTime,
       exercises: workout.exercises || [],
       comments: workout.comments || ''
     });
